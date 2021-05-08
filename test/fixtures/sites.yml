@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyText
+  url: MyText
+  timer: 1
+  last_fetch: 2021-05-06 17:22:27
+  pre_html: MyText
+  pre_readable: MyText
+
+two:
+  name: MyText
+  url: MyText
+  timer: 1
+  last_fetch: 2021-05-06 17:22:27
+  pre_html: MyText
+  pre_readable: MyText
