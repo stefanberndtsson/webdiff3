@@ -10,11 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_08_131221) do
+ActiveRecord::Schema.define(version: 2021_05_08_175628) do
 
   create_table "site_versions", force: :cascade do |t|
     t.integer "site_id"
     t.text "raw_html"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "site_xpaths", force: :cascade do |t|
+    t.integer "site_id"
+    t.text "xpath"
+    t.text "operation"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -24,11 +32,9 @@ ActiveRecord::Schema.define(version: 2021_05_08_131221) do
     t.text "url"
     t.integer "timer"
     t.datetime "last_fetch"
-    t.text "xpath_remove"
-    t.text "xpath_select"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.text "notication_tag"
+    t.text "notification_tag"
   end
 
 end

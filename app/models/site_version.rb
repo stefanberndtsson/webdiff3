@@ -16,15 +16,22 @@ class SiteVersion < ApplicationRecord
   def html
     doc = Nokogiri::HTML(raw_html)
     doc.search('script').remove
-    if self.site.xpath_remove.present?
-      doc.search(self.site.xpath_remove).remove
+    if self.site.xpaths_to_remove.present?
+      self.site.xpaths_to_remove.each do |xpath|
+        doc.search(xpath.xpath).remove
+      end
     end
-    if self.site.xpath_select.present?
-      doc = doc.search(self.site.xpath_select)
+    docs = []
+    if self.site.xpaths_to_select.present?
+      self.site.xpaths_to_select.each do |xpath|
+        docs += doc.search(xpath.xpath)
+      end
+    else
+      return doc.to_s
     end
-    doc.to_s
+    Nokogiri::HTML(docs.map {|x| x.to_s}.join("\n")).to_s
   end
-  
+
   def format(format = :html)
     return readable if format == :readable
     return text if format == :text
