@@ -66,6 +66,8 @@ GEM
     byebug (11.1.3)
     chrome_remote (0.3.0)
       websocket-driver (~> 0.6)
+    commonmarker (0.21.2)
+      ruby-enum (~> 0.5)
     concurrent-ruby (1.1.8)
     crass (1.0.6)
     diffy (3.4.0)
@@ -137,6 +139,8 @@ GEM
     rb-fsevent (0.10.4)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
+    ruby-enum (0.9.0)
+      i18n
     ruby-readability (0.7.0)
       guess_html_encoding (>= 0.0.4)
       nokogiri (>= 1.6.0)
@@ -164,6 +168,7 @@ DEPENDENCIES
   bootsnap (>= 1.4.4)
   byebug
   chrome_remote
+  commonmarker
   diffy
   html2text
   httparty

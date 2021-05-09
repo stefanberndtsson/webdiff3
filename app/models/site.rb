@@ -1,4 +1,4 @@
-require_relative 'chrome'
+require 'fileutils'
 
 class Site < ApplicationRecord
   has_many :site_versions
@@ -53,6 +53,33 @@ class Site < ApplicationRecord
     end.join("\n")
   end
 
+  def style_diff_2(diff, format)
+    return diff if format == :html
+    diff.split(/\n/).map do |line|
+      text = line[1..]
+      if line[0] == "+"
+        "<mark>#{text}</mark>"
+      elsif line[0] == "-"
+        "<s>#{text}</s>"
+      else
+        text
+      end
+    end.join("\n")
+  end
+
+  def notification_markdown_message(diff)
+    date = Time.now.strftime("%Y-%m-%d")
+    subdir = "images/#{site.id.to_s}/#{date}"
+    public_dir = Rails.root + "public" + subdir
+    FileUtils.mkdir_p(public_dir)
+    image_filename = "#{Time.now.strftime("%Y-%m-%d_%H_%M_%S")}.png"
+    web_name = "#{subdir}/#{image_filename}"
+    filename = "#{public_dir}/#{image_filename}"
+
+    HtmlToImage.from_markdown(diff, filename)
+    "![Diff](#{https://webdiff3.nocrew.org/#{webname}})"
+  end
+  
   def send_diff
     markdown_diff = diffy(:text)
     if markdown_diff
@@ -68,15 +95,12 @@ class Site < ApplicationRecord
     version2 = versions[1].format(format)
     return nil if version1 == version2
     diff = Diffy::Diff.new(version2, version1, context: 3).to_s
-    style_diff(diff, format)
+    style_diff_2(diff, format)
   end
 
   def screenshot(filename)
-    path = Rails.root + filename
-    screenshot_data = Chrome.screenshot_page(self.url)
-    File.open(path, "wb") do |file|
-      file.write(Base64.decode64(screenshot_data["data"]))
-    end
+    dir = "#{self.id}/#{Time.now.strftime("%Y-%m-%d")}"
+    HtmlToImage.screenshot_page(self.url, dir, filename)
   end
   
   def fetch
@@ -86,6 +110,7 @@ class Site < ApplicationRecord
       html = html.encode("UTF-8")
       if !latest_version || latest_version.raw_html != html.to_s
         self.site_versions.create(raw_html: html.to_s)
+        self.screenshot("#{Time.now.strftime("%Y-%m-%d_%H_%M_%S")}.png")
       end
     rescue => e
       STDERR.puts e.backtrace
