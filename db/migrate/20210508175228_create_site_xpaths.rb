@@ -1,4 +1,4 @@
-class CreateSiteXPaths < ActiveRecord::Migration[6.1]
+class CreateSiteXpaths < ActiveRecord::Migration[6.1]
   def change
     create_table :site_xpaths do |t|
       t.integer :site_id
