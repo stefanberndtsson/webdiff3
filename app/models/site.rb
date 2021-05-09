@@ -77,7 +77,7 @@ class Site < ApplicationRecord
     filename = "#{public_dir}/#{image_filename}"
 
     HtmlToImage.from_markdown(diff, filename)
-    "![Diff](#{https://webdiff3.nocrew.org/#{webname}})"
+    "![Diff](https://webdiff3.nocrew.org/#{webname})"
   end
   
   def send_diff

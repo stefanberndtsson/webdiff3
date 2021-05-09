@@ -10,6 +10,7 @@ RUN chown -R appuser:appuser /app
 
 USER appuser
 WORKDIR /home/appuser
+ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 RUN git clone --depth 1 https://github.com/stefanberndtsson/webdiff3 \
  && cd webdiff3 \
  && mv .??* * /app/
