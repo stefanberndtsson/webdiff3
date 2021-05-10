@@ -69,21 +69,23 @@ class Site < ApplicationRecord
 
   def notification_markdown_message(diff)
     date = Time.now.strftime("%Y-%m-%d")
-    subdir = "images/#{site.id.to_s}/#{date}"
+    subdir = "images/#{self.id.to_s}/#{date}"
     public_dir = Rails.root + "public" + subdir
     FileUtils.mkdir_p(public_dir)
     image_filename = "#{Time.now.strftime("%Y-%m-%d_%H_%M_%S")}.png"
-    web_name = "#{subdir}/#{image_filename}"
+    webname = "#{subdir}/#{image_filename}"
     filename = "#{public_dir}/#{image_filename}"
 
     HtmlToImage.from_markdown(diff, filename)
-    "![Diff](https://webdiff3.nocrew.org/#{webname})"
+    image_url = "#{Rails.application.credentials.base_url}/#{webname}"
+    "[![Diff](#{image_url})](#{image_url})"
   end
   
   def send_diff
     markdown_diff = diffy(:text)
     if markdown_diff
       puts " - Sending notification for #{self.name}"
+      markdown_message = notification_markdown_message(markdown_diff)
       Notify.send(self.notification_tag, self.name, markdown_diff)
     end
   end

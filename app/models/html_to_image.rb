@@ -1,13 +1,14 @@
 class HtmlToImage
   STYLE = "
   <style>
-    body { font-family: sans; }
+    body { font-family: sans; font-size: 150%; }
   </style>
   " 
   
-  def self.from_markdown(markdown, image_filename, width = 400)
+  def self.from_markdown(markdown, image_filename, width = 600)
     html = CommonMarker.render_html(markdown, [:HARDBREAKS, :UNSAFE])
-    Tempfile.open('html', encoding: 'ascii-8bit') do |file|
+    Tempfile.open(['html', '.html'], encoding: 'ascii-8bit') do |file|
+      file.write(STYLE)
       file.write(html)
       file.flush
 
