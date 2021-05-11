@@ -5,6 +5,9 @@ class Site < ApplicationRecord
   has_many :site_xpaths
 
   def next_fetch
+    # If no fetch has occurred, give a time that will make it happen.
+    return Time.now + 1.minutes if !last_fetch
+
     last_fetch + timer.minutes
   end
 
