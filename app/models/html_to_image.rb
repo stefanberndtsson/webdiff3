@@ -1,8 +1,11 @@
 class HtmlToImage
   STYLE = "
+  <head>
+    <meta charset='UTF-8'/>
   <style>
     body { font-family: sans; font-size: 150%; }
   </style>
+  </head>
   " 
   
   def self.from_markdown(markdown, image_filename, width = 600)
@@ -13,7 +16,7 @@ class HtmlToImage
       file.flush
 
       IO.popen(["wkhtmltoimage", "-f", "png", "--quality", "1", "--width", "#{width}",
-                file.path, image_filename], :err => [:child, :out]) do |io|
+                "--encoding", "UTF-8", file.path, image_filename], :err => [:child, :out]) do |io|
         # Read and ignore output
         io.read
       end
